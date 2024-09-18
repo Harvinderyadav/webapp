@@ -1,12 +1,28 @@
 import { Link } from "react-router-dom"
 import ProductCard from "../components/product-card";
+import toast from "react-hot-toast";
+import Loader, { Skeleton } from "../components/loader";
+import { useLatestProductsQuery } from "../redux/api/productAPI";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/reducer/cartReducer";
+import { CartItem } from "../types/types";
 
 
 const  Home = () => {
-  const addToCartHandler =()=>{};
+  const {data, isLoading , isError} = useLatestProductsQuery("");
+  const dispatch = useDispatch();
+
+  const addToCartHandler =(cartItem: CartItem) => {
+    if (cartItem.stock < 1) return toast.error("Out of Stock");
+    dispatch(addToCart(cartItem));
+    toast.success("Added to cart");
+  };
+
+  if(isError) toast.error("Cannot Fetch the Products");
+
   return (
     <div className= "home">
-           <section>   
+           <section> 
            </section> 
         <h1>
           Latest Products
@@ -15,14 +31,21 @@ const  Home = () => {
           </Link>
         </h1>
          <main>
+         {isLoading ? (
+          <Skeleton width="80vw" />
+        ) : (
+          data?.products.map((i) => (
           <ProductCard
-          productId="adsdasd"
-          name="mackbook"
-          price={32849}
-          stock={45}
+          key={i._id}
+          productId= {i._id}
+          name={i.name}
+          price={i.price}
+          stock={i.stock}
           handler={addToCartHandler}
-          photo="https://m.media-amazon.com/images/I/71S4sIPFvBL._SX679_.jpg"
+          photo={i.photo}
           />
+          ))
+          )}
         </main>
     </div>
   )

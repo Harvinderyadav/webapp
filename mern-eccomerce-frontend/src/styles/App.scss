@@ -90,8 +90,27 @@ dialog{
     @include flex(column, flex-start, center, 0.25rem);
    }
 }
+.not-found {
+  height: 80vh;
+  @include flex(column);
+  > svg {
+    font-size: 5rem;
+  }
+}
+.checkout-container {
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+  > form {
+    @include flex(column, flex-start, stretch, 2rem);
 
-
+    > button {
+      @include btn(1rem, $color3, $color1);
+      width: 100%;
+      font-size: 1.1rem;
+    }
+  }
+}
 
 
   
@@ -258,6 +277,21 @@ dialog{
       animation: loading-animation 0.5s linear infinite;
     }
   }
+  
+  .skeleton-loader {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .skeleton-shape {
+    height: 30px;
+    width: 100%;
+    background-color: #ddd;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    animation: skeleon-loading 1.5s infinite;
+  }
+
   
   @keyframes loading-animation {
     to {
